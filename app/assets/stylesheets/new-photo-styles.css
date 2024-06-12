@@ -1,0 +1,10 @@
+.new-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-page-content {
+  width: 50%;
+}

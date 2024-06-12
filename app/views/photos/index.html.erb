@@ -1,0 +1,88 @@
+<!-- app/views/photos/index.html.erb -->
+<div class="global-page"> 
+  <div id="photos" class="global-content" style="text-align: center;">
+    <h1>All Photos</h1>
+    
+    <div style="margin-bottom: 20px;">
+      <%= link_to "New Photo", new_photo_path, class: "btn btn-primary" %>
+    </div>
+    
+    <div class="global-page global-flex">
+      <% @photos.each do |photo| %>
+        <div class="photo-card" id="photo-<%= photo.id %>">
+          <div class="photo-card-content">
+            <p class="photo-title">Title: <%= photo.title %></p>
+            <p class="photo-description">Description: <%= photo.description %></p>
+            <p class="photo-category">Category: <%= photo.category %></p>
+            
+            
+            <% if photo.image.attached? %>
+              <div class="photo-image">
+                <%= link_to photo do %>
+                  <%= image_tag photo.image, style: "width: auto; height: auto; max-width: 350px; max-height: 200px;" %>
+                <% end %>
+              </div>
+            <% end %>
+            
+           <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+              <p class="photo-date" style="font-size: 12px; margin: 0;">Date: <%= photo.created_at.strftime("%B %d, %Y") %></p>
+              <p class="photo-likes" style="margin: 0;">
+                Likes: <span class="like-count"><%= photo.likes %></span>
+                <span class="like-toggle" data-photo-id="<%= photo.id %>">
+                  <i class="fa fa-heart"></i>
+                </span>
+              </p>
+            </div>
+
+
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Ensure you have FontAwesome included in your application layout for the heart icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+  .like-toggle {
+    cursor: pointer;
+  }
+
+  .like-toggle:hover i {
+    color: red; /* Change color on hover */
+  }
+</style>
+
+<script>
+  document.addEventListener("turbo:load", function() {
+  document.querySelectorAll('.like-toggle').forEach(function(element) {
+    element.addEventListener('click', function() {
+      var photoId = this.dataset.photoId;
+      var likeCountSpan = this.closest('.photo-card').querySelector('.like-count');
+      
+      fetch("/photos/" + photoId + "/toggle_like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        likeCountSpan.textContent = data.likes;
+      })
+      .catch(error => {
+        console.error("Error toggling like:", error);
+      });
+    });
+  });
+});
+
+</script>

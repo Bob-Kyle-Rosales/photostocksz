@@ -1,0 +1,51 @@
+<%= form_with(model: photo, class: "custom-form") do |form| %>
+  <% if photo.errors.any? %>
+    <div class="error-message">
+      <h2><%= pluralize(photo.errors.count, "error") %> prohibited this photo from being saved:</h2>
+
+      <ul>
+        <% photo.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-input" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, class: "form-input" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :category, class: "form-label" %>
+    <%= form.text_field :category, class: "form-input" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :likes, class: "form-label" %>
+    <%= form.number_field :likes, class: "form-input" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :image, class: "form-label" %>
+    <%= form.file_field :image, class: "form-input" %>
+  </div>
+
+  <!-- Add a preview of the image if the record is persisted -->
+  <% unless photo.new_record? %>
+    <% if photo.image.attached? && photo.image.variable? %>
+      <div class="form-group">
+        <%= image_tag(photo.image.variant(resize_to_limit: [100, 100])) %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="form-actions">
+    <%= form.submit "Save", class: "btn-submit" %>
+  </div>
+<% end %>

@@ -1,0 +1,18 @@
+.global-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.global-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.global-width {
+  width: 100%;
+}
+
+.global-content {
+  width: 80%;
+}
