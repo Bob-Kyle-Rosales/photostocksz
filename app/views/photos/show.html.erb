@@ -1,0 +1,119 @@
+<div class="photo-show-page">
+  <div class="photo-card-content">
+    <h1><strong><%= @photo.title %></strong></h1>
+    
+    <!-- Display the photo image if attached -->
+    <% if @photo.image.attached? %>
+      <div class="photo-image">
+        <%= image_tag @photo.image, style: "max-width: 100%; height: auto;" %>
+      </div>
+    <% end %>
+    
+    <p class="photo-description"><%= @photo.description %></p>
+    
+    <p class="photo-category"><strong>Category:</strong> <%= @photo.category %></p>
+    <p class="photo-date"><strong>Date Created:</strong> <%= @photo.created_at.strftime("%B %d, %Y") %></p>
+    <p class="photo-likes">
+      <strong>Likes:</strong> <span class="like-count"><%= @photo.likes %></span>
+      <span class="like-toggle" data-photo-id="<%= @photo.id %>">
+        <i class="fa fa-heart"></i>
+      </span>
+    </p>
+  </div>
+
+  <div class="photo-actions">
+    <%= link_to "Edit this photo", edit_photo_path(@photo), class: "btn btn-secondary" %>
+    <%= link_to "Back to photos", photos_path, class: "btn btn-primary" %>
+    <%= button_to "Destroy this photo", @photo, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+  </div>
+
+  <p style="color: green"><%= notice %></p>
+</div>
+
+<!-- Ensure you have FontAwesome included in your application layout for the heart icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+  .photo-show-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .photo-card-content {
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .photo-image {
+    margin-bottom: 20px;
+  }
+
+  .photo-description {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .photo-category, .photo-date, .photo-likes {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .like-toggle {
+    cursor: pointer;
+  }
+
+  .like-toggle:hover i {
+    color: red;
+  }
+
+  .photo-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .btn {
+    margin: 5px;
+  }
+</style>
+
+<script>
+  document.addEventListener("turbo:load", function() {
+    document.querySelectorAll('.like-toggle').forEach(function(element) {
+      element.addEventListener('click', function() {
+        var photoId = this.dataset.photoId;
+        var likeCountSpan = document.querySelector('.like-count');
+        
+        fetch("/photos/" + photoId + "/toggle_like", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          likeCountSpan.textContent = data.likes;
+        })
+        .catch(error => {
+          console.error("Error toggling like:", error);
+        });
+      });
+    });
+  });
+</script>
