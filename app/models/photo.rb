@@ -4,7 +4,11 @@ class Photo < ApplicationRecord
   has_one_attached :image
 
   # Validations for presence
-  validates :title, :description, :category, :taken_at, :tags, presence: true
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :category, presence: true
+  validates :taken_at, presence: true
+  validates :tags, presence: true
 
   # Validations for length
   validates :title, length: { minimum: 3, maximum: 100 }
@@ -26,8 +30,7 @@ class Photo < ApplicationRecord
 
   def taken_at_must_be_a_valid_datetime
     unless taken_at.is_a?(ActiveSupport::TimeWithZone) || taken_at.is_a?(Time)
-      errors.add(:taken_at,
-                 "must be a valid datetime")
+      errors.add(:taken_at, "must be a valid datetime")
     end
   rescue ArgumentError
     errors.add(:taken_at, "must be a valid datetime")
