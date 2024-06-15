@@ -2,7 +2,7 @@
 class Photo < ApplicationRecord
   # Attach image using Active Storage
   has_one_attached :image
-  
+
   # Validations for presence
   validates :title, :description, :category, :taken_at, :tags, presence: true
 
@@ -25,7 +25,10 @@ class Photo < ApplicationRecord
   private
 
   def taken_at_must_be_a_valid_datetime
-    errors.add(:taken_at, "must be a valid datetime") unless taken_at.is_a?(ActiveSupport::TimeWithZone) || taken_at.is_a?(Time)
+    unless taken_at.is_a?(ActiveSupport::TimeWithZone) || taken_at.is_a?(Time)
+      errors.add(:taken_at,
+                 "must be a valid datetime")
+    end
   rescue ArgumentError
     errors.add(:taken_at, "must be a valid datetime")
   end
