@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_12_153916) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_15_121512) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_12_153916) do
     t.string "timestamps"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "tags"
+    t.datetime "taken_at"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
