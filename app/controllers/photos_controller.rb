@@ -5,22 +5,20 @@ class PhotosController < ApplicationController
     @photos = Photo.all
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @photo = Photo.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @photo = Photo.new(photo_params)
 
     respond_to do |format|
       if @photo.save
-        format.html { redirect_to @photo, notice: 'Photo was successfully created.' }
+        format.html { redirect_to @photo, notice: "Photo was successfully created." }
         format.json { render :show, status: :created, location: @photo }
       else
         format.html { render :new }
@@ -31,13 +29,11 @@ class PhotosController < ApplicationController
 
   def update
     # Convert tags string to array
-    if photo_params[:tags].is_a?(String)
-      @photo.tags = photo_params[:tags].split(',').map(&:strip)
-    end
+    @photo.tags = photo_params[:tags].split(",").map(&:strip) if photo_params[:tags].is_a?(String)
 
     respond_to do |format|
       if @photo.update(photo_params)
-        format.html { redirect_to @photo, notice: 'Photo was successfully updated.' }
+        format.html { redirect_to @photo, notice: "Photo was successfully updated." }
         format.json { render :show, status: :ok, location: @photo }
       else
         format.html { render :edit }
@@ -48,7 +44,7 @@ class PhotosController < ApplicationController
 
   def destroy
     @photo.destroy
-    redirect_to photos_url, notice: 'Photo was successfully destroyed.'
+    redirect_to photos_url, notice: "Photo was successfully destroyed."
   end
 
   private
