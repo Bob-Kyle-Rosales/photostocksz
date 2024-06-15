@@ -12,7 +12,8 @@
     <p class="photo-description"><%= @photo.description %></p>
     
     <p class="photo-category"><strong>Category:</strong> <%= @photo.category %></p>
-    <p class="photo-date"><strong>Date Created:</strong> <%= @photo.created_at.strftime("%B %d, %Y") %></p>
+    <p class="photo-tags"><strong>Tags:</strong> <%= @photo.tags %></p>
+    <p class="photo-date"><strong>Date Taken:</strong> <%= @photo.taken_at.strftime("%B %d, %Y") %></p>
     <p class="photo-likes">
       <strong>Likes:</strong> <span class="like-count"><%= @photo.likes %></span>
       <span class="like-toggle" data-photo-id="<%= @photo.id %>">

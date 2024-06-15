@@ -14,6 +14,7 @@
             <p class="photo-title">Title: <%= photo.title %></p>
             <p class="photo-description">Description: <%= photo.description %></p>
             <p class="photo-category">Category: <%= photo.category %></p>
+            <p class="photo-tags">Tags: <%= photo.tags %></p>
             
             
             <% if photo.image.attached? %>
@@ -25,7 +26,7 @@
             <% end %>
             
            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
-              <p class="photo-date" style="font-size: 12px; margin: 0;">Date: <%= photo.created_at.strftime("%B %d, %Y") %></p>
+              <p class="photo-date" style="font-size: 12px; margin: 0;">Date: <%= photo.taken_at.strftime("%B %d, %Y") %></p>
               <p class="photo-likes" style="margin: 0;">
                 Likes: <span class="like-count"><%= photo.likes %></span>
                 <span class="like-toggle" data-photo-id="<%= photo.id %>">
