@@ -12,7 +12,8 @@ module PhotoConcern
   def show; end
 
   def create
-    @photo = Photo.new(photo_params)
+    # @photo = Photo.new(photo_params)
+    @photo = current_user.photos.new(photo_params)
   end
 
   def update
