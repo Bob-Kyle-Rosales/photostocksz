@@ -10,9 +10,26 @@ Rails.application.routes.draw do
   # Resourceful route for the PhotosController API
   namespace :api do
     namespace :v1 do
-      resources :photos, only: [:index, :show, :create, :update, :destroy]
+      resources :photos, only: [:index, :show, :create, :update, :destroy] do
+        member do
+          post 'like'
+          delete 'unlike'
+        end
+      end
+      resources :users, only: [:index, :show] do
+        member do
+          get 'liked_photos'
+          delete 'unlike_photo/:photo_id', to: 'users#unlike_photo', as: 'unlike_photo'
+        end
+      end
     end
   end
+
+  resources :registrations, only: [:create, :destroy] do
+    post 'confirm', on: :collection
+  end
+
+  resources :sessions, only: [ :create, :destroy ]
   
   
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

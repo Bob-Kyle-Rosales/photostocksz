@@ -1,7 +1,8 @@
-# app/models/photo.rb
 class Photo < ApplicationRecord
-  # Attach image using Active Storage
+  belongs_to :user
   has_one_attached :image
+  has_many :user_likes, dependent: :destroy
+  has_many :liking_users, through: :likes, source: :user
 
   # Validations for presence
   validates :title, presence: true
