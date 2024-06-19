@@ -141,10 +141,11 @@ class Api::V1::UsersController < Api::V1::BaseController
         "tags": "iphone, banner, colors"
     }
   EOS
-   def liked_photos
-    @liked_photos = @user.likes.includes(:photo).map(&:photo)
+  def liked_photos
+    @liked_photos = @user.user_likes.includes(:photo).map(&:photo)
     render json: @liked_photos
   end
+  
   
 
   private
