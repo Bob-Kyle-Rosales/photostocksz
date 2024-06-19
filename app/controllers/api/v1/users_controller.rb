@@ -1,5 +1,7 @@
 # app/controllers/api/v1/users_controller.rb
 class Api::V1::UsersController < Api::V1::BaseController
+  before_action :set_user, only: [:show, :liked_photos]
+
   api :GET, "/api/v1/users", "List all users with pagination"
   param :per_page, :number, desc: "Number of users per page", required: false
   returns code: 200, desc: "Ok"
@@ -94,5 +96,60 @@ class Api::V1::UsersController < Api::V1::BaseController
   def show
     @user = User.includes(:photos).find(params[:id])
     render json: @user, serializer: UserSerializer
+  end
+
+   api :GET, "/api/v1/users/:id/liked_photos", "Show a user's liked photos"
+  param :id, :number, desc: "User ID", required: true
+  returns code: 200, desc: "Ok"
+  returns code: 400, desc: "Bad Request"
+  returns code: 401, desc: "Unauthorized"
+  returns code: 404, desc: "Not Found"
+  returns code: 500, desc: "Internal Server Error"
+  example <<-EOS
+    {
+        "id": 1,
+        "title": "MacBook",
+        "description": "Macbook from Apple",
+        "category": "Technology",
+        "likes": [
+            {
+                "id": 1,
+                "user_id": 1,
+                "photo_id": 1,
+                "created_at": "2024-06-19T15:10:39.295Z",
+                "updated_at": "2024-06-19T15:10:39.295Z"
+            }
+        ],
+        "taken_at": "2023-11-17T12:43:40.344Z",
+        "tags": "macbook, apple, laptop"
+    },
+    {
+        "id": 2,
+        "title": "iPhone Banner",
+        "description": "iPhone banner with different colors",
+        "category": "Technology",
+        "likes": [
+            {
+                "id": 2,
+                "user_id": 1,
+                "photo_id": 2,
+                "created_at": "2024-06-19T15:27:19.887Z",
+                "updated_at": "2024-06-19T15:27:19.887Z"
+            }
+        ],
+        "taken_at": "2023-11-13T12:43:40.345Z",
+        "tags": "iphone, banner, colors"
+    }
+  EOS
+   def liked_photos
+    @liked_photos = @user.likes.includes(:photo).map(&:photo)
+    render json: @liked_photos
+  end
+  
+
+  private
+
+  def set_user
+    @user = User.find(params[:id])
   end
 end

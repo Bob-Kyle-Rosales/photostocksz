@@ -1,3 +1,23 @@
+# Create users
+user1 = User.create!(
+  firstname: "Bob Kyle",
+  lastname: "Rosales",
+  email: "john.doe@example.com",
+  password: "password",
+  password_confirmation: "password",
+  gender: "male"
+)
+
+user2 = User.create!(
+  firstname: "Alice",
+  lastname: "Smith",
+  email: "alice.smith@example.com",
+  password: "password",
+  password_confirmation: "password",
+  gender: "female"
+)
+
+# Seed photos (adjust as needed)
 photos_data = [
   {
     title:       "MacBook",
@@ -6,7 +26,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "macbook, apple, laptop",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image1.jpg"
+    image_path:  "app/assets/images/image1.jpg",
+    user_id:     user1.id
   },
   {
     title:       "iPhone Banner",
@@ -15,7 +36,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "iphone, banner, colors",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image2.png"
+    image_path:  "app/assets/images/image2.png",
+    user_id:     user2.id
   },
   {
     title:       "Hanging Out",
@@ -24,7 +46,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "friends, hanging out, social",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image3.jpg"
+    image_path:  "app/assets/images/image3.jpg",
+    user_id:     user1.id
   },
   {
     title:       "iPhone 14",
@@ -33,7 +56,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "iphone, showcase, new",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image4.jpg"
+    image_path:  "app/assets/images/image4.jpg",
+    user_id:     user2.id
   },
   {
     title:       "Atreus Kratos",
@@ -42,7 +66,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "atreus, kratos, game",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image5.png"
+    image_path:  "app/assets/images/image5.png",
+    user_id:     user1.id
   },
   {
     title:       "God of War",
@@ -51,7 +76,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "kratos, dragon, game",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image6.png"
+    image_path:  "app/assets/images/image6.png",
+    user_id:     user2.id
   },
   {
     title:       "iOS Logo",
@@ -60,7 +86,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "ios, logo, apple",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image7.png"
+    image_path:  "app/assets/images/image7.png",
+    user_id:     user1.id
   },
   {
     title:       "Genshin Background",
@@ -69,7 +96,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "genshin, impact, game",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image8.jpg"
+    image_path:  "app/assets/images/image8.jpg",
+    user_id:     user2.id
   },
   {
     title:       "Paimon",
@@ -78,7 +106,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "paimon, logo, genshin",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image9.jpg"
+    image_path:  "app/assets/images/image9.jpg",
+    user_id:     user1.id
   },
   {
     title:       "Ubuntu Jellyfish",
@@ -87,7 +116,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "ubuntu, jellyfish, linux",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image10.jpg"
+    image_path:  "app/assets/images/image10.jpg",
+    user_id:     user2.id
   },
   {
     title:       "iPhone 13",
@@ -96,7 +126,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "iphone, 13, banner",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image11.jpg"
+    image_path:  "app/assets/images/image11.jpg",
+    user_id:     user1.id
   },
   {
     title:       "MacBook Education",
@@ -105,7 +136,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "macbook, education, productivity",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image12.png"
+    image_path:  "app/assets/images/image12.png",
+    user_id:     user2.id
   },
   {
     title:       "iPhone Showcase",
@@ -114,7 +146,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "iphone, showcase, website",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image13.jpg"
+    image_path:  "app/assets/images/image13.jpg",
+    user_id:     user1.id
   },
   {
     title:       "Cute Cartoon",
@@ -123,7 +156,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "cute, cartoon, anime",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image14.jpg"
+    image_path:  "app/assets/images/image14.jpg",
+    user_id:     user2.id
   },
   {
     title:       "Digital Character",
@@ -132,7 +166,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "digital, character, fanart",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image15.jpg"
+    image_path:  "app/assets/images/image15.jpg",
+    user_id:     user1.id
   },
   {
     title:       "Cartoon Boy",
@@ -141,7 +176,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "cartoon, boy, cute",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image16.jpg"
+    image_path:  "app/assets/images/image16.jpg",
+    user_id:     user2.id
   },
   {
     title:       "Internet Vector",
@@ -150,7 +186,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "internet, vector, laptop",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image17.png"
+    image_path:  "app/assets/images/image17.png",
+    user_id:     user1.id
   },
   {
     title:       "Winnie the Pooh",
@@ -159,7 +196,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "winnie, pooh, cute",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image18.jpg"
+    image_path:  "app/assets/images/image18.jpg",
+    user_id:     user2.id
   },
   {
     title:       "Cute Anime Character",
@@ -168,7 +206,8 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "cute, anime, character",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image19.jpg"
+    image_path:  "app/assets/images/image19.jpg",
+    user_id:     user1.id
   },
   {
     title:       "Cute Bears2",
@@ -177,22 +216,34 @@ photos_data = [
     likes:       rand(1..100),
     tags:        "cute, bears, sleeping",
     taken_at:    Time.zone.now - rand(1..365).days,
-    image_path:  "app/assets/images/image20.jpg"
+    image_path:  "app/assets/images/image20.jpg",
+    user_id:     user2.id
   }
 ]
 
+# Create photos from seed data
 # Create photos from seed data
 photos_data.each do |photo_data|
   photo = Photo.new(
     title:       photo_data[:title],
     description: photo_data[:description],
     category:    photo_data[:category],
-    likes:       photo_data[:likes],
+    likes:       photo_data[:likes],  # Ensure likes is converted to integer
     tags:        photo_data[:tags],
-    taken_at:    photo_data[:taken_at]
+    taken_at:    photo_data[:taken_at],
+    user_id:     photo_data[:user_id]
   )
+  
   # Attach image using Active Storage
   photo.image.attach(io:       File.open(Rails.root.join(photo_data[:image_path])),
                      filename: File.basename(photo_data[:image_path]))
+  
   photo.save!
 end
+
+
+# Create user likes
+UserLike.create!(user: user1, photo: Photo.first)
+UserLike.create!(user: user1, photo: Photo.second)
+UserLike.create!(user: user2, photo: Photo.third)
+UserLike.create!(user: user2, photo: Photo.fourth)

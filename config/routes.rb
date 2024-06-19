@@ -10,8 +10,18 @@ Rails.application.routes.draw do
   # Resourceful route for the PhotosController API
   namespace :api do
     namespace :v1 do
-      resources :photos, only: [:index, :show, :create, :update, :destroy]
-      resources :users, only: [:index, :show]
+      resources :photos, only: [:index, :show, :create, :update, :destroy] do
+        member do
+          post 'like'
+          delete 'unlike'
+        end
+      end
+      resources :users, only: [:index, :show] do
+        member do
+          get 'liked_photos'
+          delete 'unlike_photo/:photo_id', to: 'users#unlike_photo', as: 'unlike_photo'
+        end
+      end
     end
   end
 
