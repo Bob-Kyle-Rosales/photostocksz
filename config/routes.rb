@@ -4,9 +4,10 @@ Rails.application.routes.draw do
   # Route for the index action of the PhotosController
   # get "photos" => "photos#index"
   
-  # Resourceful route for the PhotosController
+  # Resourceful route for the PhotosController HTML View
   resources :photos
 
+  # Resourceful route for the PhotosController API
   namespace :api do
     namespace :v1 do
       resources :photos, only: [:index, :show, :create, :update, :destroy]
