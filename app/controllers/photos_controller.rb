@@ -1,11 +1,22 @@
 class PhotosController < ApplicationController
+  include PhotoConcern
   before_action :set_photo, only: %i[show edit update destroy]
 
   def index
-    @photos = Photo.all
+    super
+    respond_to do |format|
+      format.html # renders the default index.html.erb
+      format.json { render json: @photos, each_serializer: PhotoSerializer }
+    end
   end
 
-  def show; end
+  def show
+    super
+    respond_to do |format|
+      format.html # renders the default show.html.erb
+      format.json { render json: @photo, serializer: PhotoSerializer }
+    end
+  end
 
   def new
     @photo = Photo.new
@@ -14,12 +25,11 @@ class PhotosController < ApplicationController
   def edit; end
 
   def create
-    @photo = Photo.new(photo_params)
-
+    super
     respond_to do |format|
       if @photo.save
         format.html { redirect_to @photo, notice: "Photo was successfully created." }
-        format.json { render :show, status: :created, location: @photo }
+        format.json { render :show, status: :created, location: @photo, serializer: PhotoSerializer }
       else
         format.html { render :new }
         format.json { render json: @photo.errors, status: :unprocessable_entity }
@@ -28,13 +38,11 @@ class PhotosController < ApplicationController
   end
 
   def update
-    # Convert tags string to array
-    @photo.tags = photo_params[:tags].split(",").map(&:strip) if photo_params[:tags].is_a?(String)
-
+    super
     respond_to do |format|
       if @photo.update(photo_params)
         format.html { redirect_to @photo, notice: "Photo was successfully updated." }
-        format.json { render :show, status: :ok, location: @photo }
+        format.json { render :show, status: :ok, location: @photo, serializer: PhotoSerializer }
       else
         format.html { render :edit }
         format.json { render json: @photo.errors, status: :unprocessable_entity }
@@ -43,17 +51,20 @@ class PhotosController < ApplicationController
   end
 
   def destroy
-    @photo.destroy
-    redirect_to photos_url, notice: "Photo was successfully destroyed."
+    super
+    respond_to do |format|
+      format.html { redirect_to photos_url, notice: "Photo was successfully destroyed." }
+      format.json { head :no_content }
+    end
   end
 
-  private
+  # private
 
-  def set_photo
-    @photo = Photo.find(params[:id])
-  end
+  # def set_photo
+  #   @photo = Photo.find(params[:id])
+  # end
 
-  def photo_params
-    params.require(:photo).permit(:title, :description, :category, :likes, :taken_at, :image, :tags)
-  end
+  # def photo_params
+  #   params.require(:photo).permit(:title, :description, :category, :likes, :taken_at, :image, :tags)
+  # end
 end

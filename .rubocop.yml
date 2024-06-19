@@ -1,11 +1,13 @@
 AllCops:
   Exclude:
     - db/migrate/**/*
+    - db/seeds.rb
     - db/schema.rb
     - config/**/*
     - script/**/*
     - bin/**/*
     - test/**/*
+    - spec/**/*
     - app/admin/**/*
     - app/channels/**/*
     - app/jobs/**/*
@@ -16,9 +18,6 @@ AllCops:
 
 require:
   - rubocop-rails
-
-Style/EndOfLine:
-  EnforcedStyle: lf
 
 Style/Encoding:
   Enabled: false
@@ -65,3 +64,37 @@ Lint/UnusedMethodArgument:
 
 Rails/HasAndBelongsToMany:
   Enabled: false
+
+# Additional recommendations
+
+# Avoids complex blocks in methods, promotes readability.
+Metrics/BlockLength:
+  Max: 25
+
+# Ensures methods are concise and readable.
+Metrics/MethodLength:
+  Max: 25
+
+# Helps maintain a good class size.
+Metrics/ClassLength:
+  Max: 250
+
+# Avoid deep nesting, which can make code harder to read.
+Metrics/BlockNesting:
+  Max: 2
+
+# Prefers consistent naming of variables.
+Naming/VariableName:
+  Enabled: true
+  EnforcedStyle: snake_case
+
+# Avoids excessive parameter lists in methods.
+Metrics/ParameterLists:
+  Max: 5
+
+# Enforce compact style for class names
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+  Include:
+    - "ActionController::Base": "app/controllers/**/*.rb"
+    - "ActiveModel::Serializer": "app/serializers/**/*.rb"

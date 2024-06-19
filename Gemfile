@@ -29,6 +29,9 @@ gem "jbuilder"
 gem 'rubocop'
 gem 'rubocop-rails'
 gem 'jquery-rails'
+gem 'apipie-rails'
+gem 'active_model_serializers'
+gem 'pagy'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
