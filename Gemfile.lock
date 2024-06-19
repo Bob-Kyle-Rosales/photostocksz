@@ -87,6 +87,7 @@ GEM
       activesupport (>= 5.0)
     ast (2.4.2)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.18.3)
@@ -137,6 +138,8 @@ GEM
       thor (>= 0.14, < 2.0)
     json (2.7.2)
     jsonapi-renderer (0.2.2)
+    jwt (2.8.2)
+      base64
     language_server-protocol (3.17.0.3)
     loofah (2.22.0)
       crass (~> 1.0.2)
@@ -292,6 +295,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers
   apipie-rails
+  bcrypt
   bootsnap
   capybara
   debug
@@ -299,6 +303,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   jquery-rails
+  jwt
   pagy
   pg (~> 1.1)
   puma (>= 5.0)
