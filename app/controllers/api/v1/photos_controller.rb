@@ -161,10 +161,10 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 401, desc: "Unauthorized"
   returns code: 500, desc: "Internal Server Error"
   def like
-    if @photo.likes.where(user_id: current_user.id).exists?
+    if @photo.user_likes.where(user_id: current_user.id).exists?
       render json: { error: 'Photo already liked' }, status: :unprocessable_entity
     else
-      like = @photo.likes.build(user: current_user)
+      like = @photo.user_likes.build(user: current_user)
       if like.save
         render json: @photo, status: :created
       else
@@ -180,7 +180,7 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 401, desc: "Unauthorized"
   returns code: 500, desc: "Internal Server Error"
   def unlike
-    like = @photo.likes.find_by(user_id: current_user.id)
+    like = @photo.user_likes.find_by(user_id: current_user.id)
     if like
       like.destroy
       head :no_content
