@@ -1,12 +1,12 @@
 class RegistrationsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:create]
-
+  skip_before_action :authenticate_user, only: [:create]
 
   def create
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save
-        format.json { render json: { success: "Confirmation email sent" }, status: :ok }
+        format.json { render json: { success: "Success Create" }, status: :ok }
       else
         format.json do
           render json:   { error: @user.errors.full_messages.join(", ") },
