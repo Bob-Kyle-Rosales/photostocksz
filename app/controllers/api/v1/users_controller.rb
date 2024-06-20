@@ -1,6 +1,6 @@
 # app/controllers/api/v1/users_controller.rb
 class Api::V1::UsersController < Api::V1::BaseController
-  before_action :set_user, only: [:show, :liked_photos]
+  before_action :set_user, only: %i[show liked_photos]
 
   api :GET, "/api/v1/users", "List all users with pagination"
   param :per_page, :number, desc: "Number of users per page", required: false
@@ -98,7 +98,7 @@ class Api::V1::UsersController < Api::V1::BaseController
     render json: @user, serializer: UserSerializer
   end
 
-   api :GET, "/api/v1/users/:id/liked_photos", "Show a user's liked photos"
+  api :GET, "/api/v1/users/:id/liked_photos", "Show a user's liked photos"
   param :id, :number, desc: "User ID", required: true
   returns code: 200, desc: "Ok"
   returns code: 400, desc: "Bad Request"
@@ -145,8 +145,8 @@ class Api::V1::UsersController < Api::V1::BaseController
     @liked_photos = @user.user_likes.includes(:photo).map(&:photo)
     render json: @liked_photos
   end
-  
-  
+
+
 
   private
 

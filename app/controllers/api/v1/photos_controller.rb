@@ -1,7 +1,7 @@
 class Api::V1::PhotosController < Api::V1::BaseController
   include PhotoConcern
   skip_before_action :verify_authenticity_token
-  before_action :set_photo, only: [:show, :update, :destroy, :like, :unlike]
+  before_action :set_photo, only: %i[show update destroy like unlike]
 
   resource_description do
     short "Photos management"
@@ -162,7 +162,7 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 500, desc: "Internal Server Error"
   def like
     if @photo.user_likes.where(user_id: current_user.id).exists?
-      render json: { error: 'Photo already liked' }, status: :unprocessable_entity
+      render json: { error: "Photo already liked" }, status: :unprocessable_entity
     else
       like = @photo.user_likes.build(user: current_user)
       if like.save
@@ -185,7 +185,7 @@ class Api::V1::PhotosController < Api::V1::BaseController
       like.destroy
       head :no_content
     else
-      render json: { error: 'Photo not liked' }, status: :unprocessable_entity
+      render json: { error: "Photo not liked" }, status: :unprocessable_entity
     end
   end
 
@@ -210,4 +210,3 @@ class Api::V1::PhotosController < Api::V1::BaseController
     @photo = Photo.find(params[:id])
   end
 end
-
