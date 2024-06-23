@@ -1,9 +1,8 @@
 class PhotosController < ApplicationController
-  include PhotoConcern
   before_action :set_photo, only: %i[show edit update destroy]
 
   def index
-    super
+    @photos = Photo.all
     respond_to do |format|
       format.html # renders the default index.html.erb
       format.json { render json: @photos, each_serializer: PhotoSerializer }
@@ -25,7 +24,7 @@ class PhotosController < ApplicationController
   def edit; end
 
   def create
-    super
+    @photo = current_user.photos.new(photo_params)
     respond_to do |format|
       if @photo.save
         format.html { redirect_to @photo, notice: "Photo was successfully created." }
@@ -40,11 +39,14 @@ class PhotosController < ApplicationController
   end
 
   def update
-    super
+    handle_tags_param
+
     respond_to do |format|
-      if @photo.update(photo_params)
+      if @photo.update(photo_params.except(:tags))
         format.html { redirect_to @photo, notice: "Photo was successfully updated." }
-        format.json { render :show, status: :ok, location: @photo, serializer: PhotoSerializer }
+        format.json do
+          render json: @photo, status: :ok, location: @photo, serializer: PhotoSerializer
+        end
       else
         format.html { render :edit }
         format.json { render json: @photo.errors, status: :unprocessable_entity }
@@ -53,20 +55,31 @@ class PhotosController < ApplicationController
   end
 
   def destroy
-    super
+    @photo.destroy
+    respond_to do |format|
+      format.html { redirect_to photos_url, notice: "Photo was successfully destroyed." }
+      format.json { head :no_content }
+    end
     respond_to do |format|
       format.html { redirect_to photos_url, notice: "Photo was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
-  # private
+  private
 
-  # def set_photo
-  #   @photo = Photo.find(params[:id])
-  # end
+  def set_photo
+    @photo = Photo.find(params[:id])
+  end
 
-  # def photo_params
-  #   params.require(:photo).permit(:title, :description, :category, :likes, :taken_at, :image, :tags)
-  # end
+  def photo_params
+    params.require(:photo).permit(:title, :description, :category, :likes, :taken_at, :image,
+                                  :tags)
+  end
+
+  def handle_tags_param
+    return unless photo_params[:tags].is_a?(String)
+
+    @photo.tags = photo_params[:tags].split(",").map(&:strip)
+  end
 end
