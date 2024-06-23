@@ -1,6 +1,5 @@
 class Api::V1::PhotosController < Api::V1::BaseController
-  include PhotoConcern
-  skip_before_action :verify_authenticity_token
+  include Api::V1::ApiHelper::PhotoHelper
   before_action :set_photo, only: %i[show update destroy like unlike]
 
   resource_description do
@@ -16,33 +15,13 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 500, desc: "Internal Server Error"
   param :page, :number, desc: "Page number for pagination"
   param :per_page, :number, desc: "Number of photos per page"
-  example <<-EOS
-    {
-      "photos": [
-        {
-          "id": 1,
-          "title": "MacBook",
-          "description": "Macbook from Apple",
-          "category": "Technology",
-          "likes": 83,
-          "taken_at": "2023-11-17T12:43:40.344Z",
-          "tags": "macbook, apple, laptop"
-        }
-      ],
-      "meta": {
-        "current_page": 1,
-        "next_page": null,
-        "prev_page": null,
-        "total_pages": 1,
-        "total_count": 1
-      }
-    }
-  EOS
+  example JSON.pretty_generate(Api::V1::ApiHelper::PhotoHelper.example_index_response)
+
   def index
     pagy, @photos = pagy(Photo.all, items: params[:per_page] || 10)
     render json: {
-      photos: ActiveModelSerializers::SerializableResource.new(@photos,
-                                                               each_serializer: PhotoSerializer),
+      photos: ActiveModelSerializers::SerializableResource
+        .new(@photos, each_serializer: Api::V1::Serializers::PhotoSerializer),
       meta:   pagy_metadata(pagy)
     }
   end
@@ -54,19 +33,10 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 401, desc: "Unauthorized"
   returns code: 404, desc: "Not Found"
   returns code: 500, desc: "Internal Server Error"
-  example <<-EOS
-    {
-      "id": 1,
-      "title": "MacBook",
-      "description": "Macbook from Apple",
-      "category": "Technology",
-      "likes": 83,
-      "taken_at": "2023-11-17T12:43:40.344Z",
-      "tags": "macbook, apple, laptop"
-    }
-  EOS
+  example JSON.pretty_generate(Api::V1::ApiHelper::PhotoHelper.example_show_response)
+
   def show
-    render json: @photo, serializer: PhotoSerializer
+    render json: @photo, serializer: Api::V1::Serializers::PhotoSerializer
   end
 
   api :POST, "/v1/photos", "Create a photo"
@@ -81,21 +51,12 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 401, desc: "Unauthorized"
   returns code: 404, desc: "Not Found"
   returns code: 500, desc: "Internal Server Error"
-  example <<-EOS
-    {
-      "id": 1,
-      "title": "MacBook",
-      "description": "Macbook from Apple",
-      "category": "Technology",
-      "likes": 83,
-      "taken_at": "2023-11-17T12:43:40.344Z",
-      "tags": "macbook, apple, laptop"
-    }
-  EOS
+  example JSON.pretty_generate(Api::V1::ApiHelper::PhotoHelper.example_create_response)
+
   def create
     @photo = Photo.new(photo_params)
     if @photo.save
-      render json: @photo, serializer: PhotoSerializer, status: :created,
+      render json: @photo, serializer: Api::V1::Serializers::PhotoSerializer, status: :created,
              location: api_v1_photo_url(@photo)
     else
       render json: @photo.errors, status: :unprocessable_entity
@@ -115,20 +76,11 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 401, desc: "Unauthorized"
   returns code: 404, desc: "Not Found"
   returns code: 500, desc: "Internal Server Error"
-  example <<-EOS
-    {
-      "id": 1,
-      "title": "MacBook",
-      "description": "Macbook from Apple",
-      "category": "Technology",
-      "likes": 83,
-      "taken_at": "2023-11-17T12:43:40.344Z",
-      "tags": "macbook, apple, laptop"
-    }
-  EOS
+  example JSON.pretty_generate(Api::V1::ApiHelper::PhotoHelper.example_update_response)
+
   def update
     if @photo.update(photo_params)
-      render json: @photo, serializer: PhotoSerializer, status: :ok,
+      render json: @photo, serializer: Api::V1::Serializers::PhotoSerializer, status: :ok,
              location: api_v1_photo_url(@photo)
     else
       render json: @photo.errors, status: :unprocessable_entity
@@ -144,11 +96,7 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 403, desc: "Forbidden"
   returns code: 404, desc: "Not Found"
   returns code: 500, desc: "Internal Server Error"
-  example <<-EOS
-    {
-      "status": "success"
-    }
-  EOS
+
   def destroy
     @photo.destroy
     head :no_content
@@ -160,6 +108,7 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 400, desc: "Bad Request"
   returns code: 401, desc: "Unauthorized"
   returns code: 500, desc: "Internal Server Error"
+
   def like
     if @photo.user_likes.where(user_id: current_user.id).exists?
       render json: { error: "Photo already liked" }, status: :unprocessable_entity
@@ -179,6 +128,7 @@ class Api::V1::PhotosController < Api::V1::BaseController
   returns code: 400, desc: "Bad Request"
   returns code: 401, desc: "Unauthorized"
   returns code: 500, desc: "Internal Server Error"
+
   def unlike
     like = @photo.user_likes.find_by(user_id: current_user.id)
     if like
