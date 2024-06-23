@@ -73,7 +73,7 @@ Metrics/BlockLength:
 
 # Ensures methods are concise and readable.
 Metrics/MethodLength:
-  Max: 25
+  Max: 40
 
 # Helps maintain a good class size.
 Metrics/ClassLength:
