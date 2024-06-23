@@ -1,6 +1,6 @@
 module AuthenticateHelper
   def authenticate_user
-    decoded_token = JsonWebToken.decode(request.headers["HTTP_AUTH_TOKEN"])
+    decoded_token = JsonWebToken.decode(request.headers["auth-token"])
     email = decoded_token["email"] if decoded_token
     @current_user = User.find_by(email:)
     render json: { error: "Not Authorized" }, status: :unauthorized unless @current_user
