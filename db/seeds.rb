@@ -1,4 +1,3 @@
-# Create users
 user1 = User.create!(
   firstname: "Bob Kyle",
   lastname: "Rosales",
@@ -17,7 +16,6 @@ user2 = User.create!(
   gender: "female"
 )
 
-# Seed photos (adjust as needed)
 photos_data = [
   {
     title:       "MacBook",
@@ -221,14 +219,12 @@ photos_data = [
   }
 ]
 
-# Create photos from seed data
-# Create photos from seed data
 photos_data.each do |photo_data|
   photo = Photo.new(
     title:       photo_data[:title],
     description: photo_data[:description],
     category:    photo_data[:category],
-    likes:       photo_data[:likes],  # Ensure likes is converted to integer
+    likes:       photo_data[:likes], 
     tags:        photo_data[:tags],
     taken_at:    photo_data[:taken_at],
     user_id:     photo_data[:user_id]
@@ -241,8 +237,6 @@ photos_data.each do |photo_data|
   photo.save!
 end
 
-
-# Create user likes
 UserLike.create!(user: user1, photo: Photo.first)
 UserLike.create!(user: user1, photo: Photo.second)
 UserLike.create!(user: user2, photo: Photo.third)
